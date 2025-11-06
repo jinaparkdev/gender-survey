@@ -1,6 +1,7 @@
-import { useState } from 'react'
-import { ChevronRight, Share2 } from 'lucide-react'
+import {useState} from 'react'
+import {ChevronRight, Share2} from 'lucide-react'
 import emailjs from '@emailjs/browser'
+import './SurveyApp.css'
 
 interface Option {
     label: string
@@ -18,6 +19,14 @@ interface Question {
 interface ResultType {
     label: string
     desc: string
+}
+
+const emailOptions = {
+    publicKey: import.meta.env.VITE_EMAIL_SERVICE_PUBLIC_KEY,
+    blockHeadless: true,
+    limitRate: {
+        throttle: 5000
+    }
 }
 
 const SurveyApp = () => {
@@ -264,19 +273,19 @@ const SurveyApp = () => {
         }).join('\n\n')
 
         const templateParams = {
-            score: score,
-            result_type: resultType.label,
-            result_desc: resultType.desc,
-            answers_detail: answersDetail,
-            timestamp: new Date().toLocaleString('ko-KR')
+            title: '설문',
+            fromName: '설문참여자',
+            time: new Date().toLocaleString('ko-KR', {timeZone: 'Asia/Seoul'}),
+            message: `총 점수: ${score}\n결과 유형: ${resultType.label}\n\n상세 답변:\n${answersDetail}`,
+            email: 'jina940323@noreply.com'
         }
 
         try {
             await emailjs.send(
-                'YOUR_SERVICE_ID',
-                'YOUR_TEMPLATE_ID',
+                import.meta.env.VITE_EMAIL_SERVICE_ID,
+                import.meta.env.VITE_EMAIL_SERVICE_TEMPLATE_ID,
                 templateParams,
-                'YOUR_PUBLIC_KEY'
+                import.meta.env.VITE_EMAIL_SERVICE_PUBLIC_KEY
             )
             alert('결과가 이메일로 전송되었습니다!')
         } catch (error) {
@@ -291,7 +300,7 @@ const SurveyApp = () => {
 
         if (navigator.share) {
             try {
-                await navigator.share({ title: '젠더 인식 설문', text })
+                await navigator.share({title: '젠더 인식 설문', text, url: window.location.href})
             } catch {
                 console.log('공유 취소됨')
             }
@@ -306,22 +315,22 @@ const SurveyApp = () => {
 
     if (stage === 'intro') {
         return (
-            <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
-                <div className="w-full max-w-md bg-white rounded-lg shadow p-8">
-                    <h1 className="text-2xl font-bold text-gray-900 mb-6 font-noto">
+            <div className="survey-center-container">
+                <div className="survey-card">
+                    <h1 className="intro-title">
                         젠더 인식 설문조사
                     </h1>
-                    <div className="mb-8 font-noto text-base leading-relaxed text-gray-600">
-                        <p className="mb-4">본 설문은 성평등 이슈에 대한 인식을 파악하기 위한 조사입니다.</p>
-                        <p className="mb-4">소요시간은 약 5분이며, 모든 응답은 익명으로 처리됩니다.</p>
+                    <div className="intro-description">
+                        <p>본 설문은 성평등 이슈에 대한 인식을 파악하기 위한 조사입니다.</p>
+                        <p>소요시간은 약 5분이며, 모든 응답은 익명으로 처리됩니다.</p>
                         <p>총 18개 문항으로 구성되어 있습니다.</p>
                     </div>
                     <button
                         onClick={() => setStage('survey')}
-                        className="w-full h-14 min-h-[44px] bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium flex items-center justify-center gap-2 font-noto text-lg transition-colors"
+                        className="btn-primary"
                     >
                         시작하기
-                        <ChevronRight size={20} />
+                        <ChevronRight size={20}/>
                     </button>
                 </div>
             </div>
@@ -331,28 +340,28 @@ const SurveyApp = () => {
     if (stage === 'result') {
         const resultType = getResultType(score)
         return (
-            <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
-                <div className="w-full max-w-md bg-white rounded-lg shadow p-8">
-                    <div className="text-center mb-8">
-                        <div className="text-6xl font-bold text-blue-600 mb-4">{score}</div>
-                        <div className="text-3xl font-bold text-gray-900 mb-4 font-noto">
+            <div className="survey-center-container">
+                <div className="survey-card">
+                    <div className="result-score">
+                        <div className="result-score-number">{score}</div>
+                        <div className="result-type">
                             {resultType.label}
                         </div>
-                        <p className="text-gray-600 font-noto text-base leading-relaxed">
+                        <p className="result-description">
                             {resultType.desc}
                         </p>
                     </div>
-                    <div className="flex flex-col gap-3">
+                    <div className="button-group">
                         <button
                             onClick={handleShare}
-                            className="w-full h-14 min-h-[44px] bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium flex items-center justify-center gap-2 font-noto text-lg transition-colors"
+                            className="btn-primary"
                         >
-                            <Share2 size={20} />
+                            <Share2 size={20}/>
                             결과 공유하기
                         </button>
                         <button
                             onClick={sendEmail}
-                            className="w-full h-14 min-h-[44px] bg-gray-500 hover:bg-gray-600 text-white rounded-lg font-medium flex items-center justify-center gap-2 font-noto text-lg transition-colors"
+                            className="btn-secondary"
                         >
                             이메일로 전송
                         </button>
@@ -362,42 +371,45 @@ const SurveyApp = () => {
         )
     }
 
+    emailjs.init(emailOptions)
+
     return (
-        <div className="min-h-screen bg-gray-100">
-            <div className="w-full bg-white shadow sticky top-0 z-10">
-                <div className="h-1 bg-gray-200">
-                    <div className="h-full bg-blue-600 transition-all duration-300" style={{ width: `${progress}%` }} />
+        <div className="survey-container">
+            <div className="progress-header">
+                <div className="progress-bar-bg">
+                    <div className="progress-bar-fill" style={{width: `${progress}%`}}/>
                 </div>
-                <div className="py-3 px-4 text-center text-sm text-gray-600 font-noto">
+                <div className="progress-text">
                     {currentQuestion + 1} / {questions.length}
                 </div>
             </div>
 
-            <div className="max-w-md mx-auto p-4 pb-24">
-                <div className="bg-white rounded-lg shadow overflow-hidden">
+            <div className="question-container">
+                <div className="question-card">
                     <img
                         src={currentQ.image}
                         alt={`질문 ${currentQ.id}`}
-                        className="w-full h-auto object-cover"
+                        className="question-image"
                     />
 
-                    <div className="p-6">
-                        <h2 className="text-lg font-bold text-gray-900 mb-6 font-noto leading-relaxed">
+                    <div className="question-content">
+                        <h2 className="question-title">
                             {currentQ.title}
                         </h2>
 
-                        <div className="flex flex-col gap-3">
+                        <div className="options-container">
                             {currentQ.options.map((option) => (
                                 <button
                                     key={option.label}
                                     onClick={() => handleAnswer(currentQ.id, option.value)}
-                                    className={`w-full p-4 rounded-lg border-2 text-left font-noto text-base leading-relaxed min-h-[44px] transition-all ${
+                                    className={`option-button ${
                                         answers[currentQ.id] === option.value
-                                            ? 'border-blue-600 bg-blue-50'
-                                            : 'border-gray-200 bg-white hover:border-gray-300'
+                                            ? 'option-button-selected'
+                                            : ''
                                     }`}
                                 >
-                                    <span className="font-bold text-gray-700">{option.label}.</span> {option.text}
+                                    <span
+                                        className="option-label">{option.label}.</span> {option.text}
                                 </button>
                             ))}
                         </div>
@@ -405,19 +417,15 @@ const SurveyApp = () => {
                 </div>
             </div>
 
-            <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4">
-                <div className="max-w-md mx-auto">
+            <div className="bottom-nav">
+                <div className="bottom-nav-inner">
                     <button
                         onClick={handleNext}
                         disabled={!isAnswered}
-                        className={`w-full h-14 min-h-[44px] rounded-lg font-medium flex items-center justify-center gap-2 font-noto text-lg transition-colors ${
-                            isAnswered
-                                ? 'bg-blue-600 hover:bg-blue-700 text-white cursor-pointer'
-                                : 'bg-gray-200 text-gray-400 cursor-not-allowed'
-                        }`}
+                        className={isAnswered ? 'btn-primary' : 'btn-disabled'}
                     >
                         {currentQuestion < questions.length - 1 ? '다음' : '결과 보기'}
-                        <ChevronRight size={20} />
+                        <ChevronRight size={20}/>
                     </button>
                 </div>
             </div>

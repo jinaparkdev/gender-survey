@@ -1,0 +1,265 @@
+/* Survey App Styles */
+
+/* Container Layouts */
+.survey-container {
+    min-height: 100vh;
+    background-color: #f3f4f6;
+}
+
+.survey-center-container {
+    min-height: 100vh;
+    background-color: #f3f4f6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+}
+
+.survey-card {
+    width: 100%;
+    max-width: 28rem;
+    background-color: white;
+    border-radius: 0.5rem;
+    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+    padding: 2rem;
+}
+
+/* Intro Stage */
+.intro-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #111827;
+    margin-bottom: 1.5rem;
+    font-family: 'Noto Sans KR', sans-serif;
+}
+
+.intro-description {
+    margin-bottom: 2rem;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 1rem;
+    line-height: 1.625;
+    color: #4b5563;
+}
+
+.intro-description p {
+    margin-bottom: 1rem;
+}
+
+.intro-description p:last-child {
+    margin-bottom: 0;
+}
+
+/* Buttons */
+.btn-primary {
+    width: 100%;
+    height: 3.5rem;
+    min-height: 44px;
+    background-color: #2563eb;
+    color: white;
+    border-radius: 0.5rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 1.125rem;
+    transition: background-color 0.2s;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-primary:hover {
+    background-color: #1d4ed8;
+}
+
+.btn-secondary {
+    width: 100%;
+    height: 3.5rem;
+    min-height: 44px;
+    background-color: #6b7280;
+    color: white;
+    border-radius: 0.5rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 1.125rem;
+    transition: background-color 0.2s;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-secondary:hover {
+    background-color: #4b5563;
+}
+
+.btn-disabled {
+    width: 100%;
+    height: 3.5rem;
+    min-height: 44px;
+    background-color: #e5e7eb;
+    color: #9ca3af;
+    border-radius: 0.5rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 1.125rem;
+    transition: background-color 0.2s;
+    border: none;
+    cursor: not-allowed;
+}
+
+.button-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+/* Result Stage */
+.result-score {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.result-score-number {
+    font-size: 3.75rem;
+    font-weight: 700;
+    color: #2563eb;
+    margin-bottom: 1rem;
+}
+
+.result-type {
+    font-size: 1.875rem;
+    font-weight: 700;
+    color: #111827;
+    margin-bottom: 1rem;
+    font-family: 'Noto Sans KR', sans-serif;
+}
+
+.result-description {
+    color: #4b5563;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 1rem;
+    line-height: 1.625;
+}
+
+/* Progress Bar */
+.progress-header {
+    width: 100%;
+    background-color: white;
+    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.progress-bar-bg {
+    height: 0.25rem;
+    background-color: #e5e7eb;
+}
+
+.progress-bar-fill {
+    height: 100%;
+    background-color: #2563eb;
+    transition: all 0.3s;
+}
+
+.progress-text {
+    padding: 0.75rem 1rem;
+    text-align: center;
+    font-size: 0.875rem;
+    color: #4b5563;
+    font-family: 'Noto Sans KR', sans-serif;
+}
+
+/* Question Content */
+.question-container {
+    max-width: 28rem;
+    margin: 0 auto;
+    padding: 1rem;
+    padding-bottom: 6rem;
+}
+
+.question-card {
+    background-color: white;
+    border-radius: 0.5rem;
+    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+    overflow: hidden;
+}
+
+.question-image {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+}
+
+.question-content {
+    padding: 1.5rem;
+}
+
+.question-title {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: #111827;
+    margin-bottom: 1.5rem;
+    font-family: 'Noto Sans KR', sans-serif;
+    line-height: 1.625;
+}
+
+/* Options */
+.options-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.option-button {
+    width: 100%;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    border: 2px solid #e5e7eb;
+    background-color: white;
+    text-align: left;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 1rem;
+    line-height: 1.625;
+    min-height: 44px;
+    transition: all 0.2s;
+    cursor: pointer;
+}
+
+.option-button:hover {
+    border-color: #d1d5db;
+}
+
+.option-button-selected {
+    border-color: #2563eb;
+    background-color: #eff6ff;
+}
+
+.option-label {
+    font-weight: 700;
+    color: #374151;
+}
+
+/* Bottom Navigation */
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: white;
+    border-top: 1px solid #e5e7eb;
+    padding: 1rem;
+}
+
+.bottom-nav-inner {
+    max-width: 28rem;
+    margin: 0 auto;
+}
