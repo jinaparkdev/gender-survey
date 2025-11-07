@@ -1,4 +1,4 @@
-import {useState} from 'react'
+import {useEffect, useState} from 'react'
 import {ChevronRight, Share2} from 'lucide-react'
 import emailjs from '@emailjs/browser'
 import './SurveyApp.css'
@@ -42,200 +42,200 @@ const SurveyApp = () => {
     const questions: Question[] = [
         {
             id: 1,
-            title: "회사 채용 공고에 '여성 우대'가 표기됐다. 당신 반응은?",
+            title: "회사 채용공고에 '여성 우대' 딱지가 붙어있어. 어떻게 생각해?",
             image: "https://via.placeholder.com/375x300/6B7280/ffffff?text=Q1",
             options: [
-                {label: "A", text: "정책 취지·통계 확인 후 의견 제시", value: 0},
-                {label: "B", text: "형평·합법성 고려", value: 1},
-                {label: "C", text: "역차별·능력주의 주장", value: 2},
-                {label: "D", text: "조롱 밈 공유", value: 3}
+                {label: "A", text: "왜 그런 정책이 생겼는지 통계랑 배경 찾아보고 의견 말하기", value: 0},
+                {label: "B", text: "공정한지, 법적으로 문제 없는지 따져보기", value: 1},
+                {label: "C", text: "이건 역차별 아냐? 실력으로 뽑아야지", value: 2},
+                {label: "D", text: "SNS에 비꼬는 짤 올리고 공유하기", value: 3}
             ]
         },
         {
             id: 2,
-            title: "군가산점 부활 국민청원",
+            title: "군가산점 다시 만들자는 청원이 떴어. 너라면?",
             image: "https://via.placeholder.com/375x300/6B7280/ffffff?text=Q2",
             options: [
-                {label: "A", text: "대체복무/보상 패키지로 논의", value: 0},
-                {label: "B", text: "형평성 논의", value: 1},
-                {label: "C", text: "당장 부활 주장", value: 2},
-                {label: "D", text: "군 가산점 반대 측을 조롱하며 적극 찬성 동의", value: 3}
+                {label: "A", text: "군복무 대신 다른 혜택 줄 방법 같이 고민해보자", value: 0},
+                {label: "B", text: "공정한지 여러 입장 들어보고 토론하기", value: 1},
+                {label: "C", text: "당연히 바로 부활시켜야지!", value: 2},
+                {label: "D", text: "반대하는 사람들 비웃으면서 무조건 찬성 서명", value: 3}
             ]
         },
         {
             id: 3,
-            title: "커뮤니티에 여성 비하 밈이 올라왔다",
+            title: "온라인 커뮤니티에 여자 비하하는 짤이 올라왔어",
             image: "https://via.placeholder.com/375x300/6B7280/ffffff?text=Q3",
             options: [
-                {label: "A", text: "신고 및 차단", value: 0},
-                {label: "B", text: "무대응/넘김", value: 1},
-                {label: "C", text: "표현의 자유로 옹호", value: 2},
-                {label: "D", text: "가담·확산", value: 3}
+                {label: "A", text: "신고 누르고 그 사람 차단", value: 0},
+                {label: "B", text: "그냥 스크롤 넘기기", value: 1},
+                {label: "C", text: "표현의 자유잖아, 별거 아니야", value: 2},
+                {label: "D", text: "웃기다며 퍼 나르고 댓글 달기", value: 3}
             ]
         },
         {
             id: 4,
-            title: "여대 남녀 공학 전환 논쟁",
+            title: "여대를 남녀공학으로 바꾸자는 얘기가 나왔어",
             image: "https://via.placeholder.com/375x300/6B7280/ffffff?text=Q4",
             options: [
-                {label: "A", text: "학생·동문 의견 듣고 안전/시설부터 점검", value: 0},
-                {label: "B", text: "공개 토론·총투표 등 절차로 결정하자", value: 1},
-                {label: "C", text: "그냥 바로 남녀공학 가자(여대 필요 없음)", value: 2},
-                {label: "D", text: "여대 폐지를 주장하며, 학생들을 공격함", value: 3}
+                {label: "A", text: "학생들 의견 먼저 듣고, 안전시설 점검부터 하자", value: 0},
+                {label: "B", text: "공개토론이나 투표로 민주적으로 결정하기", value: 1},
+                {label: "C", text: "이제 여대 필요 없지, 바로 공학 전환해", value: 2},
+                {label: "D", text: "여대 보존해야 한다고 하는 학생들 조롱하기", value: 3}
             ]
         },
         {
             id: 5,
-            title: "데이트 비용·더치 논쟁",
+            title: "데이트할 때 돈 누가 내야 하냐로 친구들이 싸워. 너 생각은?",
             image: "https://via.placeholder.com/375x300/6B7280/ffffff?text=Q5",
             options: [
-                {label: "A", text: "합의·소득 차 반영", value: 0},
-                {label: "B", text: "상황별 번갈아 계산", value: 1},
-                {label: "C", text: "남성 부담이 관습, 보상 받아야", value: 2},
-                {label: "D", text: "시대착오 조롱 콘텐츠 제작", value: 3}
+                {label: "A", text: "둘이 얘기해서 정하거나, 수입 차이 고려해서 내기", value: 0},
+                {label: "B", text: "오늘 내가, 다음엔 네가 이렇게 번갈아 내기", value: 1},
+                {label: "C", text: "남자가 내는 게 당연한 거 아냐? 그 정도는 해줘야지", value: 2},
+                {label: "D", text: "여자가 돈 안 내면 김치녀라며 조롱 영상 만들기", value: 3}
             ]
         },
         {
             id: 6,
-            title: "여성가족부 '기능 재편' 기사",
+            title: "여성가족부 없애자는 뉴스가 떴어",
             image: "https://via.placeholder.com/375x300/6B7280/ffffff?text=Q6",
             options: [
-                {label: "A", text: "타 부처 분산·성과지표 재설계", value: 0},
-                {label: "B", text: "한시적 시범 후 평가", value: 1},
-                {label: "C", text: "즉시 폐지", value: 2},
-                {label: "D", text: "혐오 밈으로 공격", value: 3}
+                {label: "A", text: "필요한 기능은 다른 부처로 옮기고 제대로 재설계하기", value: 0},
+                {label: "B", text: "일단 시범적으로 해보고 결과 보고 판단하기", value: 1},
+                {label: "C", text: "당장 폐지해", value: 2},
+                {label: "D", text: "혐오 짤 만들어서 SNS에 도배하기", value: 3}
             ]
         },
         {
             id: 7,
-            title: "데이트폭력 기사",
+            title: "데이트 폭력 기사가 떴는데 댓글이 난리야",
             image: "https://via.placeholder.com/375x300/6B7280/ffffff?text=Q7",
             options: [
-                {label: "A", text: "피해자 보호·절차적 정의 동시 고려", value: 0},
-                {label: "B", text: "수사 결과 기다림", value: 1},
-                {label: "C", text: "무고 의심부터 제기", value: 2},
-                {label: "D", text: "피해자 조롱/2차가해", value: 3}
+                {label: "A", text: "피해자 보호하면서 정확한 수사도 같이 해야 함", value: 0},
+                {label: "B", text: "일단 경찰 조사 결과 나올 때까지 기다리기", value: 1},
+                {label: "C", text: "또 무고 아냐? 의심부터 하기", value: 2},
+                {label: "D", text: "피해자한테 악플 달고 비웃기", value: 3}
             ]
         },
         {
             id: 8,
-            title: "'여성 전용' 공모전 세션",
+            title: "'여성만' 참가할 수 있는 공모전이 있어",
             image: "https://via.placeholder.com/375x300/6B7280/ffffff?text=Q8",
             options: [
-                {label: "A", text: "장벽 높은 분야의 교정적 조치로 이해", value: 0},
-                {label: "B", text: "기간·분야 한정 조건부 허용", value: 1},
-                {label: "C", text: "역차별·남성 소외", value: 2},
-                {label: "D", text: "운영진 조롱·불매", value: 3}
+                {label: "A", text: "성차별때문에 사회적 장벽이 높으니 필요해", value: 0},
+                {label: "B", text: "특정 분야에 한해서, 특정 기간동안만 제한적으로 해야해", value: 1},
+                {label: "C", text: "이거 역차별 아냐? 남자는 왜 안 돼?", value: 2},
+                {label: "D", text: "주최 측 조롱하고 불매운동 하기", value: 3}
             ]
         },
         {
             id: 9,
-            title: "단톡방 여성 외모 품평 논란",
+            title: "단톡방에서 여자 외모 평가하다가 걸렸어",
             image: "https://via.placeholder.com/375x300/6B7280/ffffff?text=Q9",
             options: [
-                {label: "A", text: "사과·재발방지 룰 제정", value: 0},
-                {label: "B", text: "논란 터진 단톡방을 없애라고 주장", value: 1},
-                {label: "C", text: "장난이라며 과민 반응 지적", value: 2},
-                {label: "D", text: "해당 사건을 조롱성 공격으로 2차 가해 가담", value: 3}
+                {label: "A", text: "사과하고 다시는 안 그러겠다고 약속해야지", value: 0},
+                {label: "B", text: "그 단톡방 없애버리면 되잖아", value: 1},
+                {label: "C", text: "장난인데 뭐... 너무 민감하게 구는 거 아냐?", value: 2},
+                {label: "D", text: "오히려 그 사건 비웃으면서 2차 가해 하기", value: 3}
             ]
         },
         {
             id: 10,
-            title: "정치인 \"젠더갈등은 언론의 산물\" 발언",
+            title: "정치인이 \"남녀갈등은 언론이 만든 거다\"라고 했어",
             image: "https://via.placeholder.com/375x300/6B7280/ffffff?text=Q10",
             options: [
-                {label: "A", text: "구조·세대·플랫폼 요인 복합론", value: 0},
-                {label: "B", text: "부분 동의 + 실증요구", value: 1},
-                {label: "C", text: "언론 탓이 전부", value: 2},
-                {label: "D", text: "좌표찍기로 언론 공격", value: 3}
+                {label: "A", text: "언론도 있지만 사회구조, 세대, SNS 등 여러 원인 복합적", value: 0},
+                {label: "B", text: "어느 정도 맞는 말인데 증거 좀 더 보여줘", value: 1},
+                {label: "C", text: "맞아, 다 언론 때문이야", value: 2},
+                {label: "D", text: "그 언론사들 공격하고 악플 달기", value: 3}
             ]
         },
         {
             id: 11,
-            title: "지하철 '여성전용칸' 확대 논쟁",
+            title: "지하철에 여성전용칸을 만든다던데?",
             image: "https://via.placeholder.com/375x300/6B7280/ffffff?text=Q11",
             options: [
-                {label: "A", text: "혼잡·안전 데이터 보고, 피크시간 한정 시범 + 혼잡완화 패키지로 묶자", value: 0},
-                {label: "B", text: "공론화/지표(이용률·범죄율) 기준으로 기간 제한 시험 후 재평가", value: 1},
-                {label: "C", text: "전용칸은 역차별이니 즉시 폐지", value: 2},
-                {label: "D", text: "빈칸 특권 밈으로 조롱", value: 3}
+                {label: "A", text: "출퇴근 시간대에만 시범 운영하고, 혼잡 완화 대책도 강구해야지", value: 0},
+                {label: "B", text: "일정 기간 해보고 이용률이랑 범죄율 보고 다시 결정하자", value: 1},
+                {label: "C", text: "이거 역차별이니까 반대야", value: 2},
+                {label: "D", text: "빈 칸 특혜라며 비꼬는 짤 만들기", value: 3}
             ]
         },
         {
             id: 12,
-            title: "알고리즘이 극단적 남초 채널을 추천",
+            title: "유튜브가 극단적인 남초 채널 계속 추천해줘",
             image: "https://via.placeholder.com/375x300/6B7280/ffffff?text=Q12",
             options: [
-                {label: "A", text: "신고하고, 차단", value: 0},
-                {label: "B", text: "시청하되 팩트체크", value: 1},
-                {label: "C", text: "내 경험과 같아 전폭 수용", value: 2},
-                {label: "D", text: "클립 편집·확산", value: 3}
+                {label: "A", text: "신고하고 관심 없음 누르기", value: 0},
+                {label: "B", text: "팩트체크 하면서 시청하기", value: 1},
+                {label: "C", text: "내 경험이랑 비슷한데? 완전 공감하고 믿기", value: 2},
+                {label: "D", text: "영상 편집해서 SNS에 퍼뜨리기", value: 3}
             ]
         },
         {
             id: 13,
-            title: "\"페미니즘은 남녀의 동등한 권리·기회를 지향한다\" 발표가 있었다. 당신의 반응은?",
+            title: "수업에서 \"페미니즘은 남녀가 동등한 권리 갖자는 거다\" 발표했어. 너는?",
             image: "https://via.placeholder.com/375x300/6B7280/ffffff?text=Q13",
             options: [
-                {label: "A", text: "적극 동의하고 보완자료 제시", value: 0},
-                {label: "B", text: "대체로 동의, 추가 데이터 요청", value: 1},
-                {label: "C", text: "동의 어렵고 역차별 우려 제기", value: 2},
-                {label: "D", text: "여성우월이라며 비판·조롱", value: 3}
+                {label: "A", text: "완전 동의! 추가 자료도 찾아서 같이 얘기하기", value: 0},
+                {label: "B", text: "대체로 맞는 말인데 자료 좀 더 보고 싶어", value: 1},
+                {label: "C", text: "글쎄... 역차별 문제도 있지 않아?", value: 2},
+                {label: "D", text: "페미니즘은 여성우월주의라며 비난하기", value: 3}
             ]
         },
         {
             id: 14,
-            title: "\"페미니즘이 한국 여성의 지위 향상에 기여했다\"는 기사 토론",
+            title: "\"페미니즘 덕분에 한국 여성 지위가 나아졌다\"는 기사 토론",
             image: "https://via.placeholder.com/375x300/6B7280/ffffff?text=Q14",
             options: [
-                {label: "A", text: "동의, 구체 사례 언급", value: 0},
-                {label: "B", text: "일부 동의, 분야별 차이 지적", value: 1},
-                {label: "C", text: "기여 적음/의문 제기", value: 2},
-                {label: "D", text: "전혀 아니며 오히려 해악 주장", value: 3}
+                {label: "A", text: "맞아, 투표권이나 교육권 같은 구체적 예시 들기", value: 0},
+                {label: "B", text: "어느 정도 맞는데 분야마다 다르긴 해", value: 1},
+                {label: "C", text: "별로 기여한 거 없는 것 같은데?", value: 2},
+                {label: "D", text: "전혀 아니고 오히려 해로워", value: 3}
             ]
         },
         {
             id: 15,
-            title: "회의 중 누군가 \"페미니즘은 여성을 피해자로만 본다\"고 말했다",
+            title: "회의 중에 누가 \"페미니즘은 여자를 피해자로만 본다\"고 했어",
             image: "https://via.placeholder.com/375x300/6B7280/ffffff?text=Q15",
             options: [
-                {label: "A", text: "왜곡이라 반박하고 정의·맥락 설명", value: 0},
-                {label: "B", text: "과장된 표현이라 정정 요구", value: 1},
-                {label: "C", text: "일정 부분 사실이라며 수긍", value: 2},
-                {label: "D", text: "전적으로 동의하고 확산", value: 3}
+                {label: "A", text: "그건 왜곡이야, 원래 의미 설명해주기", value: 0},
+                {label: "B", text: "좀 과장된 표현인 것 같아, 정정 부탁하기", value: 1},
+                {label: "C", text: "어느 정도는 맞는 말인 것 같아", value: 2},
+                {label: "D", text: "완전 공감하고 SNS에 퍼뜨리기", value: 3}
             ]
         },
         {
             id: 16,
-            title: "커뮤니티에 \"페미니즘=여성우월주의\" 밈이 돌 때 당신은?",
+            title: "커뮤니티에 \"페미니즘=여성우월주의\" 짤이 돌고 있어",
             image: "https://via.placeholder.com/375x300/6B7280/ffffff?text=Q16",
             options: [
-                {label: "A", text: "잘못된 프레이밍 지적·근거 제시", value: 0},
-                {label: "B", text: "과한 일반화라며 자제 요청", value: 1},
-                {label: "C", text: "어느 정도 맞다는 취지로 공유", value: 2},
-                {label: "D", text: "적극 가담·확산", value: 3}
+                {label: "A", text: "잘못된 정보라고 반박하고 제대로 된 자료 올리기", value: 0},
+                {label: "B", text: "너무 극단적인 일반화 아니냐고 지적하기", value: 1},
+                {label: "C", text: "어느 정도 맞는 말이라며 공유하기", value: 2},
+                {label: "D", text: "맞다고 동의하며 적극적으로 퍼뜨리기", value: 3}
             ]
         },
         {
             id: 17,
-            title: "지인이 \"너 스스로 페미니스트라 생각해?\"라고 물었다",
+            title: "친구가 \"너 페미니스트야?\" 물어봤어",
             image: "https://via.placeholder.com/375x300/6B7280/ffffff?text=Q17",
             options: [
-                {label: "A", text: "그렇다", value: 0},
-                {label: "B", text: "용어는 피하지만 성평등 가치는 지지", value: 1},
-                {label: "C", text: "용어·운동 모두 불편해 거리 둠", value: 2},
-                {label: "D", text: "페미 자체에 강한 거부감 표출", value: 3}
+                {label: "A", text: "응, 페미니스트야", value: 0},
+                {label: "B", text: "그 단어는 안 쓰는데 남녀평등은 찬성해", value: 1},
+                {label: "C", text: "페미니즘이라는 말 자체가 좀 불편해", value: 2},
+                {label: "D", text: "페미? 진짜 싫어", value: 3}
             ]
         },
         {
             id: 18,
-            title: "직장에서 '성평등 주간' 캠페인 제안이 올라왔다",
+            title: "회사에서 '성평등 주간' 캠페인 하자는데",
             image: "https://via.placeholder.com/375x300/6B7280/ffffff?text=Q18",
             options: [
-                {label: "A", text: "적극 참여·주변 참여 독려", value: 0},
-                {label: "B", text: "시간 허락 시 참여", value: 1},
-                {label: "C", text: "불필요/효과 회의적", value: 2},
-                {label: "D", text: "반대 의견 표명·조롱 콘텐츠 제작", value: 3}
+                {label: "A", text: "좋아! 적극 참여하고 다른 사람들도 같이 하자고 말하기", value: 0},
+                {label: "B", text: "시간 되면 참여하기", value: 1},
+                {label: "C", text: "굳이 필요한가? 별 효과 없을 것 같은데", value: 2},
+                {label: "D", text: "반대하고 비꼬는 콘텐츠 만들기", value: 3}
             ]
         }
     ]
@@ -434,12 +434,6 @@ const SurveyApp = () => {
                         >
                             <Share2 size={20}/>
                             결과 공유하기
-                        </button>
-                        <button
-                            onClick={sendEmail}
-                            className="btn-secondary"
-                        >
-                            이메일로 전송
                         </button>
                     </div>
                 </div>
