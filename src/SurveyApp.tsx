@@ -1,4 +1,4 @@
-import {useEffect, useState} from 'react'
+import {useState} from 'react'
 import {ChevronRight, Share2} from 'lucide-react'
 import emailjs from '@emailjs/browser'
 import './SurveyApp.css'
@@ -268,15 +268,18 @@ const SurveyApp = () => {
         }
     }
 
-    const calculateScore = () => {
+    const calculateScore = async () => {
         const total = Object.values(answers).reduce((sum: number, val: number) => sum + val, 0)
         const finalScore = Math.round((total / (3 * questions.length)) * 100)
         setScore(finalScore)
         setStage('result')
+
+        // 결과 계산 후 자동으로 이메일 전송
+        await sendEmailWithScore(finalScore)
     }
 
-    const sendEmail = async () => {
-        const resultType = getResultType(score)
+    const sendEmailWithScore = async (finalScore: number) => {
+        const resultType = getResultType(finalScore)
 
         const answersDetail = questions.map(q => {
             const answerValue = answers[q.id]
@@ -289,7 +292,7 @@ const SurveyApp = () => {
             title: '설문',
             fromName: '설문참여자',
             time: new Date().toLocaleString('ko-KR', {timeZone: 'Asia/Seoul'}),
-            message: `성별: ${gender}\n연령대: ${ageGroup}\n총 점수: ${score}\n결과 유형: ${resultType.label}\n\n상세 답변:\n${answersDetail}`,
+            message: `성별: ${gender}\n연령대: ${ageGroup}\n총 점수: ${finalScore}\n결과 유형: ${resultType.label}\n\n상세 답변:\n${answersDetail}`,
             email: 'jina940323@noreply.com'
         }
 
@@ -300,12 +303,12 @@ const SurveyApp = () => {
                 templateParams,
                 import.meta.env.VITE_EMAIL_SERVICE_PUBLIC_KEY
             )
-            alert('결과가 이메일로 전송되었습니다!')
+            console.log('이메일이 자동으로 전송되었습니다.')
         } catch (error) {
             console.error('이메일 전송 실패:', error)
-            alert('이메일 전송에 실패했습니다. 다시 시도해주세요.')
         }
     }
+
 
     const handleShare = async () => {
         const resultType = getResultType(score)
@@ -345,6 +348,16 @@ const SurveyApp = () => {
                         시작하기
                         <ChevronRight size={20}/>
                     </button>
+                    <div className="organizer-info">
+                        <div className="organizer-label">주최</div>
+                        <div className="organizer-names">
+                            <span>경기도</span>
+                            <span className="organizer-divider">•</span>
+                            <span>경기시민연구소울림</span>
+                            <span className="organizer-divider">•</span>
+                            <span>청년향유연구소</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         )
@@ -456,11 +469,11 @@ const SurveyApp = () => {
 
             <div className="question-container">
                 <div className="question-card">
-                    <img
-                        src={currentQ.image}
-                        alt={`질문 ${currentQ.id}`}
-                        className="question-image"
-                    />
+                    {/*<img*/}
+                    {/*    src={currentQ.image}*/}
+                    {/*    alt={`질문 ${currentQ.id}`}*/}
+                    {/*    className="question-image"*/}
+                    {/*/>*/}
 
                     <div className="question-content">
                         <h2 className="question-title">

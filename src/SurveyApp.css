@@ -263,3 +263,51 @@
     max-width: 28rem;
     margin: 0 auto;
 }
+
+/* Organizer Info */
+.organizer-info {
+    margin-top: 2rem;
+    padding: 1.5rem;
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    border-radius: 0.75rem;
+    border: 1px solid #e2e8f0;
+    text-align: center;
+}
+
+.organizer-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.75rem;
+    font-family: 'Noto Sans KR', sans-serif;
+}
+
+.organizer-names {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: #1e293b;
+    font-family: 'Noto Sans KR', sans-serif;
+    line-height: 1.5;
+}
+
+.organizer-names span {
+    white-space: nowrap;
+}
+
+.organizer-divider {
+    color: #94a3b8;
+    font-weight: 400;
+}
+
+@media (max-width: 640px) {
+    .organizer-names {
+        font-size: 0.875rem;
+    }
+}
