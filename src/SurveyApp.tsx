@@ -242,18 +242,21 @@ const SurveyApp = () => {
 
     const getResultType = (score: number): ResultType => {
         if (score <= 25) return {
-            label: "개방형",
+            label: `이대남 지수:${score}점`,
             desc: "다양한 관점을 존중하며 성평등 이슈에 개방적인 태도를 보입니다. 대화와 이해를 중시하는 성향입니다."
         }
         if (score <= 50) return {
-            label: "신중형",
+            label: `이대남 지수:${score}점`,
             desc: "성평등 이슈에 신중하게 접근하며 균형잡힌 시각을 유지하려 노력합니다. 상황에 따라 유연한 판단을 보입니다."
         }
         if (score <= 75) return {
-            label: "방어형",
+            label: `이대남 지수:${score}점`,
             desc: "성평등 이슈에 경계심을 갖고 있으며 역차별에 대한 우려가 있습니다. 현재 구조에 대한 불만을 표현합니다."
         }
-        return {label: "대립형", desc: "성평등 담론에 강한 반감을 보이며 대립적 태도를 취합니다. 극단적 표현이나 조롱에 동조하는 경향이 있습니다."}
+        return {
+            label: `이대남 지수:${score}점`,
+            desc: "성평등 담론에 강한 반감을 보이며 대립적 태도를 취합니다. 극단적 표현이나 조롱에 동조하는 경향이 있습니다."
+        }
     }
 
     const handleAnswer = (questionId: number, value: number) => {
@@ -308,7 +311,6 @@ const SurveyApp = () => {
             console.error('이메일 전송 실패:', error)
         }
     }
-
 
     const handleShare = async () => {
         const resultType = getResultType(score)
@@ -371,18 +373,26 @@ const SurveyApp = () => {
                         <p>설문 진행을 위해 기본 정보를 선택해주세요.</p>
                     </div>
 
-                    <div style={{ marginTop: '2rem', width: '100%' }}>
-                        <div style={{ marginBottom: '2rem' }}>
-                            <h3 style={{ fontSize: '1.125rem', fontWeight: '600', marginBottom: '1rem', color: '#1f2937' }}>
+                    <div style={{marginTop: '2rem', width: '100%'}}>
+                        <div style={{marginBottom: '2rem'}}>
+                            <h3 style={{
+                                fontSize: '1.125rem',
+                                fontWeight: '600',
+                                marginBottom: '1rem',
+                                color: '#1f2937'
+                            }}>
                                 성별
                             </h3>
-                            <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
+                            <div style={{display: 'flex', gap: '0.75rem', flexWrap: 'wrap'}}>
                                 {['남성', '여성', '기타', '선택 안 함'].map((option) => (
                                     <button
                                         key={option}
                                         onClick={() => setGender(option)}
                                         className={`option-button ${gender === option ? 'option-button-selected' : ''}`}
-                                        style={{ flex: '1 1 calc(50% - 0.375rem)', minWidth: '120px' }}
+                                        style={{
+                                            flex: '1 1 calc(50% - 0.375rem)',
+                                            minWidth: '120px'
+                                        }}
                                     >
                                         {option}
                                     </button>
@@ -390,17 +400,25 @@ const SurveyApp = () => {
                             </div>
                         </div>
 
-                        <div style={{ marginBottom: '2rem' }}>
-                            <h3 style={{ fontSize: '1.125rem', fontWeight: '600', marginBottom: '1rem', color: '#1f2937' }}>
+                        <div style={{marginBottom: '2rem'}}>
+                            <h3 style={{
+                                fontSize: '1.125rem',
+                                fontWeight: '600',
+                                marginBottom: '1rem',
+                                color: '#1f2937'
+                            }}>
                                 연령대
                             </h3>
-                            <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
+                            <div style={{display: 'flex', gap: '0.75rem', flexWrap: 'wrap'}}>
                                 {['10대', '20대', '30대', '40대', '50대 이상'].map((option) => (
                                     <button
                                         key={option}
                                         onClick={() => setAgeGroup(option)}
                                         className={`option-button ${ageGroup === option ? 'option-button-selected' : ''}`}
-                                        style={{ flex: '1 1 calc(50% - 0.375rem)', minWidth: '120px' }}
+                                        style={{
+                                            flex: '1 1 calc(50% - 0.375rem)',
+                                            minWidth: '120px'
+                                        }}
                                     >
                                         {option}
                                     </button>
@@ -413,7 +431,7 @@ const SurveyApp = () => {
                         onClick={() => setStage('survey')}
                         disabled={!gender || !ageGroup}
                         className={gender && ageGroup ? 'btn-primary' : 'btn-disabled'}
-                        style={{ marginTop: '1rem' }}
+                        style={{marginTop: '1rem'}}
                     >
                         설문 시작하기
                         <ChevronRight size={20}/>
