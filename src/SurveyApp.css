@@ -31,6 +31,7 @@
     color: #111827;
     margin-bottom: 1.5rem;
     font-family: 'Noto Sans KR', sans-serif;
+    text-align: center;
 }
 
 .intro-description {
@@ -43,6 +44,7 @@
 
 .intro-description p {
     margin-bottom: 1rem;
+    text-align: center;
 }
 
 .intro-description p:last-child {

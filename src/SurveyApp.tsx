@@ -334,12 +334,10 @@ const SurveyApp = () => {
             <div className="survey-center-container">
                 <div className="survey-card">
                     <h1 className="intro-title">
-                        젠더 인식 설문조사
+                        이대남 테스트
                     </h1>
                     <div className="intro-description">
-                        <p>본 설문은 성평등 이슈에 대한 인식을 파악하기 위한 조사입니다.</p>
-                        <p>소요시간은 약 5분이며, 모든 응답은 익명으로 처리됩니다.</p>
-                        <p>총 18개 문항으로 구성되어 있습니다.</p>
+                        <p>나의 이대남 지수는 몇 점일까?</p>
                     </div>
                     <button
                         onClick={() => setStage('info')}
@@ -349,7 +347,6 @@ const SurveyApp = () => {
                         <ChevronRight size={20}/>
                     </button>
                     <div className="organizer-info">
-                        <div className="organizer-label">주최</div>
                         <div className="organizer-names">
                             <span>경기도</span>
                             <span className="organizer-divider">•</span>
