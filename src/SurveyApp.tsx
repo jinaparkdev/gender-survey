@@ -468,7 +468,7 @@ const SurveyApp = () => {
     }
 
     if (stage === 'result') {
-        const resultType = getResultType(100)
+        const resultType = getResultType(score)
         return (
             <div className="survey-center-container">
                 <div className="survey-card">
