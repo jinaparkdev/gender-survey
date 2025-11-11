@@ -1,5 +1,5 @@
 import {useState} from 'react'
-import {ChevronRight, Share2} from 'lucide-react'
+import {ChevronRight} from 'lucide-react'
 import emailjs from '@emailjs/browser'
 import './SurveyApp.css'
 
@@ -19,6 +19,9 @@ interface Question {
 interface ResultType {
     label: string
     desc: string
+    image: string
+    color: string
+    summary: string
 }
 
 type stageType = 'intro' | 'info' | 'survey' | 'result'
@@ -242,19 +245,31 @@ const SurveyApp = () => {
 
     const getResultType = (score: number): ResultType => {
         if (score <= 25) return {
-            label: `이대남 지수:${score}점`,
+            image: "/light.png",
+            color: "#2763EB",
+            label: `라이트`,
+            summary: "성향 거의 없음",
             desc: "다양한 관점을 존중하며 성평등 이슈에 개방적인 태도를 보입니다. 대화와 이해를 중시하는 성향입니다."
         }
         if (score <= 50) return {
-            label: `이대남 지수:${score}점`,
+            image: "/medium.png",
+            color: "#FF661A",
+            label: `미디움`,
+            summary: "약간 있음",
             desc: "성평등 이슈에 신중하게 접근하며 균형잡힌 시각을 유지하려 노력합니다. 상황에 따라 유연한 판단을 보입니다."
         }
         if (score <= 75) return {
-            label: `이대남 지수:${score}점`,
+            image: "/high.png",
+            color: "#DF5D5D",
+            label: `하이`,
+            summary: "뚜렷함",
             desc: "성평등 이슈에 경계심을 갖고 있으며 역차별에 대한 우려가 있습니다. 현재 구조에 대한 불만을 표현합니다."
         }
         return {
-            label: `이대남 지수:${score}점`,
+            image: "/extreme.png",
+            color: "#D20000",
+            label: `익스트림`,
+            summary: "매우 강함",
             desc: "성평등 담론에 강한 반감을 보이며 대립적 태도를 취합니다. 극단적 표현이나 조롱에 동조하는 경향이 있습니다."
         }
     }
@@ -312,21 +327,6 @@ const SurveyApp = () => {
         }
     }
 
-    const handleShare = async () => {
-        const resultType = getResultType(score)
-        const text = `젠더 인식 설문 결과: ${resultType.label} (${score}점)`
-
-        if (navigator.share) {
-            try {
-                await navigator.share({title: '젠더 인식 설문', text, url: window.location.href})
-            } catch {
-                console.log('공유 취소됨')
-            }
-        } else {
-            alert('이 브라우저는 공유 기능을 지원하지 않습니다.')
-        }
-    }
-
     const progress = ((currentQuestion + 1) / questions.length) * 100
     const currentQ = questions[currentQuestion]
     const isAnswered = answers[currentQ?.id] !== undefined
@@ -336,27 +336,53 @@ const SurveyApp = () => {
             <div className="survey-center-container">
                 <div className="survey-card">
                     <h1 className="intro-title">
-                        이대남 테스트
+                        <span style={{color: "#2763EB"}}>이대남</span> 테스트
                     </h1>
-                    <div className="intro-description">
+                    <div className="intro-description" onClick={() => setStage('info')}>
                         <p>나의 이대남 지수는 몇 점일까?</p>
                     </div>
-                    <button
-                        onClick={() => setStage('info')}
-                        className="btn-primary"
-                    >
-                        시작하기
-                        <ChevronRight size={20}/>
-                    </button>
-                    <div className="organizer-info">
-                        <div className="organizer-names">
-                            <span>경기도</span>
-                            <span className="organizer-divider">•</span>
-                            <span>경기시민연구소울림</span>
-                            <span className="organizer-divider">•</span>
-                            <span>청년향유연구소</span>
+                    <div style={{position: 'relative', marginTop: '1rem'}}>
+                        <img
+                            src="/main.png"
+                            alt="Survey Intro"
+                            className="intro-image"
+                            style={{
+                                width: '100%',
+                                display: 'block'
+                            }}
+                        />
+                        <div
+                            style={{
+                                position: 'absolute',
+                                bottom: '2rem',
+                                left: '50%',
+                                transform: 'translateX(-50%)',
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '0.5rem'
+                            }}
+                        >
+                            <img
+                                src="/logo.png"
+                                alt="Logo"
+                                style={{
+                                    width: '50px',
+                                    height: 'auto'
+                                }}
+                            />
+                            <span
+                                style={{
+                                    fontSize: '1rem',
+                                    fontWeight: '900',
+                                    color: '#2763EB',
+                                    marginLeft: '0.5rem'
+                                }}
+                            >
+                                청년향유연구소
+                            </span>
                         </div>
                     </div>
+
                 </div>
             </div>
         )
@@ -364,13 +390,13 @@ const SurveyApp = () => {
 
     if (stage === 'info') {
         return (
-            <div className="survey-center-container">
+            <div className="survey-center-container" style={{padding: '1rem'}}>
                 <div className="survey-card">
                     <h1 className="intro-title">
                         기본 정보 입력
                     </h1>
-                    <div className="intro-description">
-                        <p>설문 진행을 위해 기본 정보를 선택해주세요.</p>
+                    <div className="info-description">
+                        <p>설문 진행을 위해 기본 정보를 선택해주세요</p>
                     </div>
 
                     <div style={{marginTop: '2rem', width: '100%'}}>
@@ -442,27 +468,81 @@ const SurveyApp = () => {
     }
 
     if (stage === 'result') {
-        const resultType = getResultType(score)
+        const resultType = getResultType(100)
         return (
             <div className="survey-center-container">
                 <div className="survey-card">
                     <div className="result-score">
-                        <div className="result-score-number">{score}</div>
+                        <div className="result-score-number" style={{color: resultType.color}}>
+                            {score}
+                        </div>
+
+                        <div style={{
+                            width: '50%',
+                            height: '1px',
+                            backgroundColor: '#e5e7eb',
+                            margin: '0 auto'
+                        }}/>
                         <div className="result-type">
                             {resultType.label}
+                            <span style={{
+                                color: resultType.color,
+                                marginLeft: '0.5rem',
+                                fontWeight: '700'
+                            }}>
+                                {resultType.summary}
+                            </span>
                         </div>
-                        <p className="result-description">
-                            {resultType.desc}
-                        </p>
-                    </div>
-                    <div className="button-group">
-                        <button
-                            onClick={handleShare}
-                            className="btn-primary"
+
+                        <img
+                            src={resultType.image}
+                            alt="Result"
+                            style={{
+                                borderRadius: '1rem',
+                                marginLeft: '2rem',
+                                marginRight: '2rem',
+                                width: 'calc(100% - 4rem)',
+                                display: 'block'
+                            }}
+                        />
+                        <div className="result-description-container"
+                             style={{borderColor: resultType.color}}
                         >
-                            <Share2 size={20}/>
-                            결과 공유하기
-                        </button>
+                            <p className="result-description">
+                                {resultType.desc}
+                            </p>
+                        </div>
+                    </div>
+
+                    <div
+                        style={{
+                            position: 'absolute',
+                            bottom: '2rem',
+                            left: '50%',
+                            transform: 'translateX(-50%)',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '0.5rem'
+                        }}
+                    >
+                        <img
+                            src="/logo.png"
+                            alt="Logo"
+                            style={{
+                                width: '50px',
+                                height: 'auto'
+                            }}
+                        />
+                        <span
+                            style={{
+                                fontSize: '1rem',
+                                fontWeight: '900',
+                                color: '#2763EB',
+                                marginLeft: '0.5rem'
+                            }}
+                        >
+                                청년향유연구소
+                            </span>
                     </div>
                 </div>
             </div>
@@ -484,16 +564,23 @@ const SurveyApp = () => {
 
             <div className="question-container">
                 <div className="question-card">
-                    {/*<img*/}
-                    {/*    src={currentQ.image}*/}
-                    {/*    alt={`질문 ${currentQ.id}`}*/}
-                    {/*    className="question-image"*/}
-                    {/*/>*/}
 
                     <div className="question-content">
-                        <h2 className="question-title">
-                            {currentQ.title}
-                        </h2>
+                        <div className="question-title-container">
+                            <div className="question-title-badge">
+                                이대남 테스트
+                            </div>
+                            <h2 className="question-title">
+                                <span style={{
+                                    color: '#2763EB',
+                                    fontWeight: '700',
+                                    marginRight: '0.5rem'
+                                }}>
+                                    {currentQ.id})
+                                </span>
+                                {currentQ.title}
+                            </h2>
+                        </div>
 
                         <div className="options-container">
                             {currentQ.options.map((option) => (
